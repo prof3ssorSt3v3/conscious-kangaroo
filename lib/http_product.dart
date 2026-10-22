@@ -1,8 +1,8 @@
 import 'dart:convert'; // for JSON conversion
 
-import 'package:http/http.dart' as http; // for the HTTP methods
-import 'package:fetch/http_exception.dart';
-import 'package:fetch/product.dart';
+import 'package:http/http.dart' as http; // for the HTTP methods from pub.dev
+import 'package:fetch/http_exception.dart'; //our custom exceptions for http
+import 'package:fetch/product.dart'; //our data model class
 
 typedef ProductList = List<Product>;
 
@@ -10,6 +10,7 @@ typedef ProductList = List<Product>;
 class HttpProduct {
   late Uri uri;
   static ProductList productList = [];
+  // static List<Product> productList = [];
 
   HttpProduct(String hostname) {
     // or use the Uri.parse method
@@ -25,10 +26,10 @@ class HttpProduct {
     //Http Get a single product
     uri = Uri(host: uri.host, scheme: uri.scheme, port: uri.port, path: path);
     //we can set headers for the request like this
-    Map<String, String>? headers = {};
+    Map<String, String>? headers = {'X-Important': 'you betcha'};
     final http.Response response;
     try {
-      response = await http.get(uri, headers: headers);
+      response = await http.get(uri, headers: headers); //our fetch() call
     } on http.ClientException catch (ex) {
       throw HttpHelperException('Request to ${ex.uri.toString()} failed.', null);
     }
@@ -50,8 +51,10 @@ class HttpProduct {
     }
     //convert Map to a Product instance
     return Product.fromJson(decoded as Map<String, dynamic>);
+    // Product.fromJson() was expecting a Map<String, dynamic> so we add "as"
   }
 
+  //Future<List<Product>>.  Future<List<Map<String, dynamic>>>
   Future<ProductList> getProducts(String path) async {
     //Http Get a list of products
     uri = Uri(host: uri.host, scheme: uri.scheme, port: uri.port, path: path);
@@ -88,6 +91,7 @@ class HttpProduct {
         }
         return Product.fromJson(item);
       }).toList();
+      //List.map() returns an Iterable... which must be converted to a List
       return HttpProduct.productList;
     } on FormatException catch (error) {
       throw HttpHelperException('Invalid products response: ${error.message}', response.statusCode);

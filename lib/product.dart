@@ -1,6 +1,8 @@
 //Data Model Class for Product
 // import 'dart:convert';
 
+// typedef Product = Map<String, dynamic>; NOT
+
 //Data Model class that defines the properties of a product
 class Product {
   final int id;
@@ -18,7 +20,7 @@ class Product {
     required this.price,
     required this.brand,
     required this.sku,
-    required this.thumbnail,
+    this.thumbnail,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
