@@ -12,10 +12,11 @@ class HttpProduct {
   HttpProduct(String hostname) {
     // or use the Uri.parse method
     // HttpProduct(String url) {
-    // uri = Uri.parse(url);
+    // uri = Uri.tryParse(url); //check for exceptions
     //or you can build a URI from the parts
-    uri = Uri(host: hostname, scheme: 'https', port: 443, path: '/');
+    // uri = Uri(host: hostname, scheme: 'https', port: 443, path: '/');
     //set a default base url so we just have to update the path
+    uri = Uri.https(hostname, '/', {});
   }
 
   Future<Product> getProduct(String path) async {
@@ -26,8 +27,8 @@ class HttpProduct {
     final http.Response response;
     try {
       response = await http.get(uri, headers: headers);
-    } on http.ClientException catch (error) {
-      throw HttpHelperException('Request failed: $error', null);
+    } on http.ClientException catch (ex) {
+      throw HttpHelperException('Request to ${ex.uri.toString()} failed.', null);
     }
 
     if (response.statusCode < 200 || response.statusCode >= 300) {

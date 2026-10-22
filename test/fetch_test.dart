@@ -1,4 +1,4 @@
-import 'package:fetch/http_helper.dart';
+import 'package:fetch/http_product.dart';
 import 'package:test/test.dart';
 
 void main() {
