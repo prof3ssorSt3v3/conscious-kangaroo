@@ -4,10 +4,12 @@ import 'package:http/http.dart' as http; // for the HTTP methods
 import 'package:fetch/http_exception.dart';
 import 'package:fetch/product.dart';
 
+typedef ProductList = List<Product>;
+
 //Class with all the Http Methods for Products
 class HttpProduct {
   late Uri uri;
-  static List<Product> productList = [];
+  static ProductList productList = [];
 
   HttpProduct(String hostname) {
     // or use the Uri.parse method
@@ -50,7 +52,7 @@ class HttpProduct {
     return Product.fromJson(decoded as Map<String, dynamic>);
   }
 
-  Future<List<Product>> getProducts(String path) async {
+  Future<ProductList> getProducts(String path) async {
     //Http Get a list of products
     uri = Uri(host: uri.host, scheme: uri.scheme, port: uri.port, path: path);
     //we can set headers for the request like this

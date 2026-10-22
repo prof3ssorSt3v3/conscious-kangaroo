@@ -2,6 +2,7 @@ import 'package:fetch/http_product.dart';
 import 'package:fetch/product.dart';
 import 'package:fetch/http_exception.dart';
 
+typedef ProductList = List<Product>;
 void main(List<String> arguments) async {
   String host = 'dummyjson.com';
   HttpProduct http = HttpProduct(host);
@@ -14,7 +15,7 @@ void main(List<String> arguments) async {
   }
 
   try {
-    List<Product> productList = await http.getProducts('/products');
+    ProductList productList = await http.getProducts('/products');
     print(productList[2].toString());
 
     print(HttpProduct.productList[2].toString());
